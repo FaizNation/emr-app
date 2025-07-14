@@ -13,23 +13,31 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $students = Student::with('school')->paginate(15);
-        return view('students.index', compact('students'));
+        $schools = School::withCount('students')->get();
+        return view('students.schools', compact('schools'));
+    }
+
+    /**
+     * Display the students of a specific school.
+     */
+    public function schoolStudents(School $school)
+    {
+        $students = $school->students()->paginate(15);
+        return view('students.index', compact('school', 'students'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(School $school)
     {
-        $schools = School::all();
-        return view('students.create', compact('schools'));
+        return view('students.create', compact('school'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, School $school)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -39,40 +47,38 @@ class StudentController extends Controller
             'gender' => 'required|in:L,P',
             'address' => 'required|string',
             'class' => 'required|string|max:255',
-            'school_id' => 'required|exists:schools,id',
             'guardian_name' => 'required|string|max:255',
             'guardian_nik' => 'required|string',
             'phone' => 'required|string|max:255',
         ]);
 
+        $validated['school_id'] = $school->id;
         Student::create($validated);
 
-        return redirect()->route('students.index')
+        return redirect()->route('students.school', $school)
             ->with('success', 'Data siswa berhasil ditambahkan.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Student $student)
+    public function show(School $school, Student $student)
     {
-        $student->load('school', 'screenings');
-        return view('students.show', compact('student'));
+        return view('students.show', compact('school', 'student'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Student $student)
+    public function edit(School $school, Student $student)
     {
-        $schools = School::all();
-        return view('students.edit', compact('student', 'schools'));
+        return view('students.edit', compact('school', 'student'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Student $student)
+    public function update(Request $request, School $school, Student $student)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -82,7 +88,6 @@ class StudentController extends Controller
             'gender' => 'required|in:L,P',
             'address' => 'required|string',
             'class' => 'required|string|max:255',
-            'school_id' => 'required|exists:schools,id',
             'guardian_name' => 'required|string|max:255',
             'guardian_nik' => 'required|string',
             'phone' => 'required|string|max:255',
@@ -90,18 +95,18 @@ class StudentController extends Controller
 
         $student->update($validated);
 
-        return redirect()->route('students.index')
+        return redirect()->route('students.school', $school)
             ->with('success', 'Data siswa berhasil diperbarui.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Student $student)
+    public function destroy(School $school, Student $student)
     {
         $student->delete();
 
-        return redirect()->route('students.index')
+        return redirect()->route('students.school', $school)
             ->with('success', 'Data siswa berhasil dihapus.');
     }
 }

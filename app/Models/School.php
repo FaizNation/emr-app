@@ -18,4 +18,12 @@ class School extends Model
     {
         return $this->hasMany(Student::class);
     }
+
+    /**
+     * Get the screenings for the school.
+     */
+    public function screenings()
+    {
+        return $this->hasMany(Screening::class);
+    }
 }

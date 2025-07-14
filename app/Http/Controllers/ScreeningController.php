@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\School;
 use App\Models\Student;
 use App\Models\Screening;
 use Illuminate\Http\Request;
@@ -13,101 +14,128 @@ class ScreeningController extends Controller
      */
     public function index()
     {
-        $screenings = Screening::with(['student.school'])->paginate(15);
-        return view('screenings.index', compact('screenings'));
+        $schools = School::withCount('students')
+            ->withCount('screenings')
+            ->orderBy('name')
+            ->get();
+        return view('screenings.schools', compact('schools'));
+    }
+
+    public function school(School $school)
+    {
+        $screenings = $school->screenings()
+            ->with('student')
+            ->latest()
+            ->paginate(10);
+
+        return view('screenings.index', compact('school', 'screenings'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(School $school)
     {
-        $students = Student::with('school')->get();
-        return view('screenings.create', compact('students'));
+        // Get students who don't have screenings yet
+        $students = $school->students()
+            ->whereNotExists(function($query) {
+                $query->select('student_id')
+                    ->from('screenings')
+                    ->whereRaw('screenings.student_id = students.id');
+            })
+            ->orderBy('name')
+            ->get();
+
+        return view('screenings.create', compact('school', 'students'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, School $school)
     {
         $validated = $request->validate([
             'student_id' => 'required|exists:students,id',
-            'weight' => 'required|numeric',
-            'height' => 'required|numeric',
-            'lpimt' => 'required|numeric',
-            'nutrition_status' => 'required|string|max:255',
-            'blood_pressure' => 'required|string|max:255',
-            'vision_right' => 'required|string|max:255',
-            'vision_left' => 'required|string|max:255',
-            'hearing' => 'required|string|max:255',
-            'dental' => 'required|string|max:255',
-            'anemia' => 'required|string|max:255',
-            'disability' => 'required|string|max:255',
-            'fitness' => 'required|string|max:255',
-            'referral' => 'nullable|string',
+            'weight' => 'required|numeric|min:0|max:999.99',
+            'height' => 'required|numeric|min:0|max:999.99',
+            'lpimt' => 'required|numeric|min:0|max:999.99',
+            'nutrition_status' => 'required|string',
+            'blood_pressure' => 'required|string',
+            'vision_right' => 'required|string',
+            'vision_left' => 'required|string',
+            'hearing' => 'required|string',
+            'dental' => 'required|string',
+            'anemia' => 'required|string',
+            'disability' => 'required|string',
+            'fitness' => 'required|string',
+            'referral' => 'nullable|string'
         ]);
+
+        // Add school_id to the data
+        $validated['school_id'] = $school->id;
 
         Screening::create($validated);
 
-        return redirect()->route('screenings.index')
+        return redirect()
+            ->route('screenings.school', $school)
             ->with('success', 'Data skrining berhasil ditambahkan.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Screening $screening)
+    public function show(School $school, Screening $screening)
     {
-        $screening->load('student.school');
-        return view('screenings.show', compact('screening'));
+        $screening->load('student');
+        return view('screenings.show', compact('school', 'screening'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Screening $screening)
+    public function edit(School $school, Screening $screening)
     {
-        $students = Student::with('school')->get();
-        return view('screenings.edit', compact('screening', 'students'));
+        $screening->load('student');
+        return view('screenings.edit', compact('school', 'screening'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Screening $screening)
+    public function update(Request $request, School $school, Screening $screening)
     {
         $validated = $request->validate([
-            'student_id' => 'required|exists:students,id',
-            'weight' => 'required|numeric',
-            'height' => 'required|numeric',
-            'lpimt' => 'required|numeric',
-            'nutrition_status' => 'required|string|max:255',
-            'blood_pressure' => 'required|string|max:255',
-            'vision_right' => 'required|string|max:255',
-            'vision_left' => 'required|string|max:255',
-            'hearing' => 'required|string|max:255',
-            'dental' => 'required|string|max:255',
-            'anemia' => 'required|string|max:255',
-            'disability' => 'required|string|max:255',
-            'fitness' => 'required|string|max:255',
-            'referral' => 'nullable|string',
+            'weight' => 'required|numeric|min:0|max:999.99',
+            'height' => 'required|numeric|min:0|max:999.99',
+            'lpimt' => 'required|numeric|min:0|max:999.99',
+            'nutrition_status' => 'required|string',
+            'blood_pressure' => 'required|string',
+            'vision_right' => 'required|string',
+            'vision_left' => 'required|string',
+            'hearing' => 'required|string',
+            'dental' => 'required|string',
+            'anemia' => 'required|string',
+            'disability' => 'required|string',
+            'fitness' => 'required|string',
+            'referral' => 'nullable|string'
         ]);
 
         $screening->update($validated);
 
-        return redirect()->route('screenings.index')
+        return redirect()
+            ->route('screenings.school', $school)
             ->with('success', 'Data skrining berhasil diperbarui.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Screening $screening)
+    public function destroy(School $school, Screening $screening)
     {
         $screening->delete();
 
-        return redirect()->route('screenings.index')
+        return redirect()
+            ->route('screenings.school', $school)
             ->with('success', 'Data skrining berhasil dihapus.');
     }
 }

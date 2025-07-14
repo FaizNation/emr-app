@@ -19,15 +19,41 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('schools', SchoolController::class);
     
     // Students Management
-    Route::resource('students', StudentController::class);
+    Route::get('/students', [StudentController::class, 'index'])->name('students.index');
+    Route::get('/schools/{school}/students', [StudentController::class, 'schoolStudents'])->name('students.school');
+    Route::get('/schools/{school}/students/create', [StudentController::class, 'create'])->name('students.create');
+    Route::post('/schools/{school}/students', [StudentController::class, 'store'])->name('students.store');
+    Route::get('/schools/{school}/students/{student}', [StudentController::class, 'show'])->name('students.show');
+    Route::get('/schools/{school}/students/{student}/edit', [StudentController::class, 'edit'])->name('students.edit');
+    Route::put('/schools/{school}/students/{student}', [StudentController::class, 'update'])->name('students.update');
+    Route::delete('/schools/{school}/students/{student}', [StudentController::class, 'destroy'])->name('students.destroy');
     
     // Screenings Management
-    Route::resource('screenings', ScreeningController::class);
+    Route::get('/screenings', [ScreeningController::class, 'index'])->name('screenings.index');
+    Route::get('/schools/{school}/screenings', [ScreeningController::class, 'schoolScreenings'])->name('screenings.school');
+    Route::get('/schools/{school}/screenings/create', [ScreeningController::class, 'create'])->name('screenings.create');
+    Route::post('/schools/{school}/screenings', [ScreeningController::class, 'store'])->name('screenings.store');
+    Route::get('/schools/{school}/screenings/{screening}', [ScreeningController::class, 'show'])->name('screenings.show');
+    Route::get('/schools/{school}/screenings/{screening}/edit', [ScreeningController::class, 'edit'])->name('screenings.edit');
+    Route::put('/schools/{school}/screenings/{screening}', [ScreeningController::class, 'update'])->name('screenings.update');
+    Route::delete('/schools/{school}/screenings/{screening}', [ScreeningController::class, 'destroy'])->name('screenings.destroy');
 
     // Profile routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::middleware(['auth'])->group(function () {
+    // Screening routes
+    Route::get('/screenings', [ScreeningController::class, 'index'])->name('screenings.index');
+    Route::get('/screenings/{school}', [ScreeningController::class, 'school'])->name('screenings.school');
+    Route::get('/screenings/{school}/create', [ScreeningController::class, 'create'])->name('screenings.create');
+    Route::post('/screenings/{school}', [ScreeningController::class, 'store'])->name('screenings.store');
+    Route::get('/screenings/{school}/{screening}', [ScreeningController::class, 'show'])->name('screenings.show');
+    Route::get('/screenings/{school}/{screening}/edit', [ScreeningController::class, 'edit'])->name('screenings.edit');
+    Route::put('/screenings/{school}/{screening}', [ScreeningController::class, 'update'])->name('screenings.update');
+    Route::delete('/screenings/{school}/{screening}', [ScreeningController::class, 'destroy'])->name('screenings.destroy');
 });
 
 require __DIR__.'/auth.php';

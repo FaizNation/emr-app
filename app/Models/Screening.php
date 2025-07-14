@@ -11,6 +11,7 @@ class Screening extends Model
 
     protected $fillable = [
         'student_id',
+        'school_id',
         'weight',
         'height',
         'lpimt',
@@ -26,14 +27,19 @@ class Screening extends Model
         'referral'
     ];
 
-    protected $casts = [
-        'weight' => 'float',
-        'height' => 'float',
-        'lpimt' => 'float'
-    ];
-
+    /**
+     * Get the student that owns the screening.
+     */
     public function student()
     {
         return $this->belongsTo(Student::class);
+    }
+
+    /**
+     * Get the school that owns the screening.
+     */
+    public function school()
+    {
+        return $this->belongsTo(School::class);
     }
 }

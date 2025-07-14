@@ -10,28 +10,34 @@ class Student extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
+        'school_id',
         'nik',
+        'name',
+        'gender',
         'birth_date',
         'birth_place',
-        'gender',
-        'address',
         'class',
-        'school_id',
+        'phone',
+        'address',
         'guardian_name',
-        'guardian_nik',
-        'phone'
+        'guardian_nik'
     ];
 
     protected $casts = [
         'birth_date' => 'date'
     ];
 
+    /**
+     * Get the school that owns the student.
+     */
     public function school()
     {
         return $this->belongsTo(School::class);
     }
 
+    /**
+     * Get the screenings for the student.
+     */
     public function screenings()
     {
         return $this->hasMany(Screening::class);
