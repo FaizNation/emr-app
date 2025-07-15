@@ -11,10 +11,18 @@ class StudentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $schools = School::withCount('students')->get();
-        return view('students.schools', compact('schools'));
+        $search = $request->input('search');
+        
+        $schools = School::withCount('students')
+            ->when($search, function($query) use ($search) {
+                return $query->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('address', 'like', '%' . $search . '%');
+            })
+            ->get();
+            
+        return view('students.schools', compact('schools', 'search'));
     }
 
     /**
@@ -39,24 +47,35 @@ class StudentController extends Controller
      */
     public function store(Request $request, School $school)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'nik' => 'required|string|unique:students,nik',
-            'birth_place' => 'required|string|max:255',
-            'birth_date' => 'required|date',
-            'gender' => 'required|in:L,P',
-            'address' => 'required|string',
-            'class' => 'required|string|max:255',
-            'guardian_name' => 'required|string|max:255',
-            'guardian_nik' => 'required|string',
-            'phone' => 'required|string|max:255',
-        ]);
+        try {
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'nik' => 'required|string|unique:students,nik',
+                'birth_place' => 'required|string|max:255',
+                'birth_date' => 'required|date',
+                'gender' => 'required|in:L,P',
+                'address' => 'required|string',
+                'class' => 'required|string|max:255',
+                'guardian_name' => 'required|string|max:255',
+                'guardian_nik' => 'required|string',
+                'phone' => 'required|string|max:255',
+            ]);
 
-        $validated['school_id'] = $school->id;
-        Student::create($validated);
+            $validated['school_id'] = $school->id;
+            Student::create($validated);
 
-        return redirect()->route('students.school', $school)
-            ->with('success', 'Data siswa berhasil ditambahkan.');
+            return redirect()->route('students.school', $school)
+                ->with('success', 'Data siswa berhasil ditambahkan.');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()->back()
+                ->withErrors($e->validator)
+                ->withInput()
+                ->with('error', 'Mohon periksa kembali data yang dimasukkan.');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
 
     /**
