@@ -17,8 +17,7 @@ class StudentController extends Controller
         
         $schools = School::withCount('students')
             ->when($search, function($query) use ($search) {
-                return $query->where('name', 'like', '%' . $search . '%')
-                    ->orWhere('address', 'like', '%' . $search . '%');
+                return $query->where('name', 'like', '%' . $search . '%');
             })
             ->get();
             
