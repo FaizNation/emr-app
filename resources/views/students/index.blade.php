@@ -37,7 +37,7 @@
                         @if (request('search'))
                             <a href="{{ route('students.school', $school) }}"
                                 class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">
-                                Reset
+                                Resetz
                             </a>
                         @endif
                     </form>
