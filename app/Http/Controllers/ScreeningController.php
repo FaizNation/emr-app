@@ -12,13 +12,23 @@ class ScreeningController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $search = $request->input('search');
+
         $schools = School::withCount('students')
             ->withCount('screenings')
+            ->when($search, function($query) use ($search) {
+                $query->where(function($q) use ($search) {
+                    $q->where('name', 'like', '%' . $search . '%')
+                      ->orWhere('type', 'like', '%' . $search . '%');
+                });
+            })
+            ->orderBy('type')
             ->orderBy('name')
             ->get();
-        return view('screenings.schools', compact('schools'));
+
+        return view('screenings.schools', compact('schools', 'search'));
     }
 
     public function school(School $school)
