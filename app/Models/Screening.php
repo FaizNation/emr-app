@@ -9,19 +9,29 @@ class Screening extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'weight' => 'decimal:2',
+        'height' => 'decimal:2',
+        'waist_circumference' => 'decimal:2',
+        'bmi' => 'decimal:2',
+        'hemoglobin' => 'decimal:2',
+        'fitness' => 'boolean'
+    ];
+
     protected $fillable = [
         'student_id',
         'school_id',
         'weight',
         'height',
-        'lpimt',
-        'nutrition_status',
+        'waist_circumference',
+        'bmi',
+        'nutritional_status',
         'blood_pressure',
         'vision_right',
         'vision_left',
         'hearing',
         'dental',
-        'anemia',
+        'hemoglobin',
         'disability',
         'fitness',
         'referral'

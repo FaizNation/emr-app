@@ -71,7 +71,7 @@
                                 <select name="gender" id="gender"
                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                                     <option value="L" {{ old('gender', $student->gender) == 'L' ? 'selected' : '' }}>
-                                        Laki-lai</option>
+                                        Laki-laki</option>
                                     <option value="P" {{ old('gender', $student->gender) == 'P' ? 'selected' : '' }}>
                                         Perempuan</option>
                                 </select>

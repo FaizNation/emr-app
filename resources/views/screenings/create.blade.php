@@ -3,191 +3,222 @@
 @section('title', 'Tambah Skrining - ' . $school->name)
 
 @section('content')
-<div class="container mx-auto">
-    <div class="max-w-3xl mx-auto">
-        <div class="mb-6">
-            <a href="{{ route('screenings.school', $school) }}" class="text-gray-600 hover:text-gray-900">
-                ← Kembali ke Daftar Skrining
-            </a>
-        </div>
+    <div class="container mx-auto">
+        <div class="max-w-3xl mx-auto">
+            <div class="mb-6">
+                <a href="{{ route('screenings.school', $school) }}" class="text-gray-600 hover:text-gray-900">
+                    ← Kembali ke Daftar Skrining
+                    </a>
+                </div>
 
-        <div class="flex justify-between items-center mb-6">
-            <div>
-                <h1 class="text-2xl font-bold">Tambah Skrining Kesehatan</h1>
-                <p class="text-gray-600">{{ $school->name }}</p>
-            </div>
-        </div>
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h1 class="text-2xl font-bold">Tambah Skrining Kesehatan</h1>
+                    <p class="text-gray-600">{{ $school->name }}</p>
+                    </div>
+                </div>
 
-        <div class="bg-white shadow-sm rounded-lg overflow-hidden">
-            <form action="{{ route('screenings.store', $school) }}" method="POST" class="p-6">
-                @csrf
+            <div class="bg-white shadow-sm rounded-lg overflow-hidden">
+                <form action="{{ route('screenings.store', $school) }}" method="POST" class="p-6">
+                    @csrf
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Siswa -->
-                    <div class="col-span-2">
-                        <label for="student_id" class="block text-sm font-medium text-gray-700">Siswa</label>
-                        <select name="student_id" id="student_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
-                            <option value="">Pilih Siswa</option>
-                            @foreach($students as $student)
-                                <option value="{{ $student->id }}" {{ old('student_id') == $student->id ? 'selected' : '' }}>
-                                    {{ $student->name }} - Kelas {{ $student->class }}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Siswa -->
+                        <div class="col-span-2">
+                            <label for="student_id"
+                                class="block text-sm font-medium text-gray-700">Siswa</label>
+                            <select name="student_id" id="student_id"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                required>
+                                <option value="">Pilih Siswa</option>
+                                @foreach ($students as $student)
+                                    <option value="{{ $student->id }}"
+                                        {{ old('student_id') == $student->id ? 'selected' : '' }}>
+                                        {{ $student->name }} - Kelas
+                                        {{ $student->class }}
+                                        </option>
+                                @endforeach
+                                </select>
+                            @if ($students->isEmpty())
+                                <p class="mt-2 text-sm text-red-600">Semua siswa di sekolah ini sudah memiliki data
+                                    skrining.</p>
+                            @endif
+                            </div>
+
+                        <!-- BB & TB -->
+                        <div>
+                            <label for="weight"
+                                class="block text-sm font-medium text-gray-700">Berat Badan (kg)</label>
+                            <input type="number" step="0.1" name="weight" id="weight"
+                                value="{{ old('weight') }}"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                required>
+                            </div>
+
+                        <div>
+                            <label for="height"
+                                class="block text-sm font-medium text-gray-700">Tinggi Badan (cm)</label>
+                            <input type="number" step="0.1" name="height" id="height"
+                                value="{{ old('height') }}"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                required>
+                            </div>
+
+                        <div>
+                            <label for="waist_circumference"
+                                class="block text-sm font-medium text-gray-700"> Badan (cm)</label>
+                            <input type="number" step="0.1" name="waist_circumference"
+                                id="waist_circumference" value="{{ old('waist_circumference') }}"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                required>
+                            </div>
+
+                        <!-- IMT & Status Gizi -->
+                        <div>
+                            <label for="bmi"
+                                class="block text-sm font-medium text-gray-700">IMT</label>
+                            <input type="number" step="0.01" name="bmi" id="bmi"
+                                value="{{ old('bmi') }}"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                required readonly>
+                            </div>
+
+                        <div>
+                            <label for="nutritional_status"
+                                class="block text-sm font-medium text-gray-700">Status gizi</label>
+                            <input type="text" name="nutritional_status" id="nutritional_status"
+                                value="{{ old('nutritional_status') }}"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                required>
+                            </div>
+
+                        <!-- Tekanan Darah -->
+                        <div>
+                            <label for="blood_pressure"
+                                class="block text-sm font-medium text-gray-700">Tekanan Darah</label>
+                            <input type="text" name="blood_pressure" id="blood_pressure"
+                                value="{{ old('blood_pressure') }}" placeholder="120/80"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                required>
+                            </div>
+
+                        <!-- Penglihatan -->
+                        <div>
+                            <label for="vision_right"
+                                class="block text-sm font-medium text-gray-700">Mata Kanan</label>
+                            <input type="text" name="vision_right" id="vision_right"
+                                value="{{ old('vision_right') }}"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                required>
+                            </div>
+
+                        <div>
+                            <label for="vision_left"
+                                class="block text-sm font-medium text-gray-700">Mata Kiri</label>
+                            <input type="text" name="vision_left" id="vision_left"
+                                value="{{ old('vision_left') }}"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                required>
+                            </div>
+
+                        <!-- Pendengaran -->
+                        <div>
+                            <label for="hearing"
+                                class="block text-sm font-medium text-gray-700">Pendengaran</label>
+                            <input type="text" name="hearing" id="hearing"
+                                value="{{ old('hearing') }}"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                required>
+                            </div>
+
+                        <!-- Gigi -->
+                        <div>
+                            <label for="dental"
+                                class="block text-sm font-medium text-gray-700">Gigi</label>
+                            <input type="text" name="dental" id="dental"
+                                value="{{ old('dental') }}"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                required>
+                            </div>
+
+                        <!-- Anemia -->
+                        <div>
+                            <label for="hemoglobin"
+                                class="block text-sm font-medium text-gray-700">Anemia</label>
+                            <input type="number" step="0.1" name="hemoglobin"
+                                id="hemoglobin" value="{{ old('hemoglobin') }}"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                required>
+                            </div>
+
+                        <!-- Kecacatan -->
+                        <div>
+                            <label for="disability"
+                                class="block text-sm font-medium text-gray-700">Kecacatan</label>
+                            <input type="text" name="disability" id="disability"
+                                value="{{ old('disability') }}"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                required>
+                            </div>
+
+                        <!-- Kebugaran -->
+                        <div>
+                            <label for="fitness"
+                                class="block text-sm font-medium text-gray-600">Status Kebugaran</label>
+                            <select name="fitness" id="fitness"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                <option value="1"
+                                    {{ old('fitness', $screening->fitness ?? '') ? 'selected' : '' }}>Bugar</option>
+                                <option value="0"
+                                    {{ old('fitness', $screening->fitness ?? '') === false ? 'selected' : '' }}>Tidak Bugar
                                 </option>
-                            @endforeach
-                        </select>
-                        @if($students->isEmpty())
-                            <p class="mt-2 text-sm text-red-600">Semua siswa di sekolah ini sudah memiliki data skrining.</p>
-                        @endif
+                                </select>
+                            @error('fitness')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                            
+                        </div>
+                        </div>
+
+                    <!-- Rujukan -->
+                    <div class="mt-6">
+                        <label for="referral"
+                            class="block text-sm font-medium text-gray-700">Rujukan</label>
+                        
+                        <textarea name="referral" id="referral" rows="3"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">{{ old('referral') }}</textarea>
+                        
                     </div>
 
-                    <!-- BB & TB -->
-                    <div>
-                        <label for="weight" class="block text-sm font-medium text-gray-700">Berat Badan (kg)</label>
-                        <input type="number" step="0.1" name="weight" id="weight" value="{{ old('weight') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
-                    </div>
-
-                    <div>
-                        <label for="height" class="block text-sm font-medium text-gray-700">Tinggi Badan (cm)</label>
-                        <input type="number" step="0.1" name="height" id="height" value="{{ old('height') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
-                    </div>
-
-                    <!-- LPIMT & Status Gizi -->
-                    <div>
-                        <label for="lpimt" class="block text-sm font-medium text-gray-700">LPIMT</label>
-                        <input type="number" step="0.01" name="lpimt" id="lpimt" value="{{ old('lpimt') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required readonly>
-                    </div>
-
-                    <div>
-                        <label for="nutrition_status" class="block text-sm font-medium text-gray-700">Status Gizi</label>
-                        <select name="nutrition_status" id="nutrition_status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
-                            <option value="">Pilih Status</option>
-                            <option value="Sangat Kurus" {{ old('nutrition_status') == 'Sangat Kurus' ? 'selected' : '' }}>Sangat Kurus</option>
-                            <option value="Kurus" {{ old('nutrition_status') == 'Kurus' ? 'selected' : '' }}>Kurus</option>
-                            <option value="Normal" {{ old('nutrition_status') == 'Normal' ? 'selected' : '' }}>Normal</option>
-                            <option value="Gemuk" {{ old('nutrition_status') == 'Gemuk' ? 'selected' : '' }}>Gemuk</option>
-                            <option value="Obesitas" {{ old('nutrition_status') == 'Obesitas' ? 'selected' : '' }}>Obesitas</option>
-                        </select>
-                    </div>
-
-                    <!-- Tekanan Darah -->
-                    <div>
-                        <label for="blood_pressure" class="block text-sm font-medium text-gray-700">Tekanan Darah</label>
-                        <input type="text" name="blood_pressure" id="blood_pressure" value="{{ old('blood_pressure') }}" placeholder="120/80" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
-                    </div>
-
-                    <!-- Penglihatan -->
-                    <div>
-                        <label for="vision_right" class="block text-sm font-medium text-gray-700">Mata Kanan</label>
-                        <input type="text" name="vision_right" id="vision_right" value="{{ old('vision_right') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
-                    </div>
-
-                    <div>
-                        <label for="vision_left" class="block text-sm font-medium text-gray-700">Mata Kiri</label>
-                        <input type="text" name="vision_left" id="vision_left" value="{{ old('vision_left') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
-                    </div>
-
-                    <!-- Pendengaran -->
-                    <div>
-                        <label for="hearing" class="block text-sm font-medium text-gray-700">Pendengaran</label>
-                        <select name="hearing" id="hearing" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
-                            <option value="">Pilih Status</option>
-                            <option value="Normal" {{ old('hearing') == 'Normal' ? 'selected' : '' }}>Normal</option>
-                            <option value="Gangguan Ringan" {{ old('hearing') == 'Gangguan Ringan' ? 'selected' : '' }}>Gangguan Ringan</option>
-                            <option value="Gangguan Sedang" {{ old('hearing') == 'Gangguan Sedang' ? 'selected' : '' }}>Gangguan Sedang</option>
-                            <option value="Gangguan Berat" {{ old('hearing') == 'Gangguan Berat' ? 'selected' : '' }}>Gangguan Berat</option>
-                        </select>
-                    </div>
-
-                    <!-- Gigi -->
-                    <div>
-                        <label for="dental" class="block text-sm font-medium text-gray-700">Skrining Gigi</label>
-                        <select name="dental" id="dental" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
-                            <option value="">Pilih Status</option>
-                            <option value="Sehat" {{ old('dental') == 'Sehat' ? 'selected' : '' }}>Sehat</option>
-                            <option value="Karies Ringan" {{ old('dental') == 'Karies Ringan' ? 'selected' : '' }}>Karies Ringan</option>
-                            <option value="Karies Sedang" {{ old('dental') == 'Karies Sedang' ? 'selected' : '' }}>Karies Sedang</option>
-                            <option value="Karies Berat" {{ old('dental') == 'Karies Berat' ? 'selected' : '' }}>Karies Berat</option>
-                        </select>
-                    </div>
-
-                    <!-- Anemia -->
-                    <div>
-                        <label for="anemia" class="block text-sm font-medium text-gray-700">Skrining Anemia</label>
-                        <select name="anemia" id="anemia" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
-                            <option value="">Pilih Status</option>
-                            <option value="Normal" {{ old('anemia') == 'Normal' ? 'selected' : '' }}>Normal</option>
-                            <option value="Anemia Ringan" {{ old('anemia') == 'Anemia Ringan' ? 'selected' : '' }}>Anemia Ringan</option>
-                            <option value="Anemia Sedang" {{ old('anemia') == 'Anemia Sedang' ? 'selected' : '' }}>Anemia Sedang</option>
-                            <option value="Anemia Berat" {{ old('anemia') == 'Anemia Berat' ? 'selected' : '' }}>Anemia Berat</option>
-                        </select>
-                    </div>
-
-                    <!-- Kecacatan -->
-                    <div>
-                        <label for="disability" class="block text-sm font-medium text-gray-700">Kecacatan</label>
-                        <input type="text" name="disability" id="disability" value="{{ old('disability') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
-                    </div>
-
-                    <!-- Kebugaran -->
-                    <div>
-                        <label for="fitness" class="block text-sm font-medium text-gray-700">Kebugaran</label>
-                        <select name="fitness" id="fitness" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
-                            <option value="">Pilih Status</option>
-                            <option value="Sangat Baik" {{ old('fitness') == 'Sangat Baik' ? 'selected' : '' }}>Sangat Baik</option>
-                            <option value="Baik" {{ old('fitness') == 'Baik' ? 'selected' : '' }}>Baik</option>
-                            <option value="Cukup" {{ old('fitness') == 'Cukup' ? 'selected' : '' }}>Cukup</option>
-                            <option value="Kurang" {{ old('fitness') == 'Kurang' ? 'selected' : '' }}>Kurang</option>
-                        </select>
-                    </div>
+                    <div class="mt-6">
+                        <button type="submit"
+                            class="w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
+                            Simpan Data Skrining
+                            </button>
+                        </div>
+                    </form>
                 </div>
-
-                <!-- Rujukan -->
-                <div class="mt-6">
-                    <label for="referral" class="block text-sm font-medium text-gray-700">Rujukan</label>
-                    <textarea name="referral" id="referral" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">{{ old('referral') }}</textarea>
-                </div>
-
-                <div class="mt-6">
-                    <button type="submit" class="w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
-                        Simpan Data Skrining
-                    </button>
-                </div>
-            </form>
-        </div>
+            </div>
     </div>
-</div>
 
-<script>
-// Auto calculate LPIMT when weight or height changes
-document.addEventListener('DOMContentLoaded', function() {
-    const weightInput = document.getElementById('weight');
-    const heightInput = document.getElementById('height');
-    const lpimtInput = document.getElementById('lpimt');
+    <script>
+        // Auto calculate bmi when weight or height changes
+        document.addEventListener('DOMContentLoaded', function() {
+            const weightInput = document.getElementById('weight');
+            const heightInput = document.getElementById('height');
+            const bmiInput = document.getElementById('bmi');
 
-    function calculateLPIMT() {
-        if (weightInput.value && heightInput.value) {
-            const weight = parseFloat(weightInput.value);
-            const height = parseFloat(heightInput.value) / 100; // convert to meters
-            const lpimt = weight / (height * height);
-            lpimtInput.value = lpimt.toFixed(2);
-
-            // Auto-select nutrition status based on LPIMT
-            const nutritionStatus = document.getElementById('nutrition_status');
-            if (lpimt < 17) {
-                nutritionStatus.value = 'Sangat Kurus';
-            } else if (lpimt < 18.5) {
-                nutritionStatus.value = 'Kurus';
-            } else if (lpimt < 25) {
-                nutritionStatus.value = 'Normal';
-            } else if (lpimt < 30) {
-                nutritionStatus.value = 'Gemuk';
-            } else {
-                nutritionStatus.value = 'Obesitas';
+            function calculatebmi() {
+                if (weightInput.value && heightInput.value) {
+                    const weight = parseFloat(weightInput.value);
+                    const height = parseFloat(heightInput.value) / 100; // convert to meters
+                    const bmi = weight / (height * height);
+                    bmiInput.value = bmi.toFixed(2);
+                }
             }
-        }
-    }
 
-    weightInput.addEventListener('input', calculateLPIMT);
-    heightInput.addEventListener('input', calculateLPIMT);
-});
-</script>
+            weightInput.addEventListener('input', calculatebmi);
+            heightInput.addEventListener('input', calculatebmi);
+        });
+    </script>
 @endsection

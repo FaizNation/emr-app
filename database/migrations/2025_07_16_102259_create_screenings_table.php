@@ -15,19 +15,25 @@ return new class extends Migration
             $table->id();
             $table->foreignId('student_id')->constrained()->onDelete('cascade');
             $table->foreignId('school_id')->constrained()->onDelete('cascade');
-            $table->decimal('weight', 5, 2); // in kg
-            $table->decimal('height', 5, 2); // in cm
-            $table->decimal('lpimt', 5, 2); // calculated from weight and height
-            $table->string('nutrition_status');
-            $table->string('blood_pressure');
+           
+            // PERTUMBUHAN
+            $table->decimal('weight', 8, 2); // BB
+            $table->decimal('height', 8, 2); // TB
+            $table->decimal('waist_circumference', 8, 2); // Lingkar Perut
+            $table->decimal('bmi', 8, 2); // IMT
+            $table->string('nutritional_status'); // Status Gizi
+            $table->string('blood_pressure'); // Tekanan Darah
+           
+            // SKRINING INDERA
             $table->string('vision_right');
             $table->string('vision_left');
             $table->string('hearing');
             $table->string('dental');
-            $table->string('anemia');
+            $table->decimal('hemoglobin', 8, 2);
             $table->string('disability');
-            $table->string('fitness');
-            $table->text('referral')->nullable();
+            $table->boolean('fitness');
+            $table->string('referral');
+           
             $table->timestamps();
         });
     }
