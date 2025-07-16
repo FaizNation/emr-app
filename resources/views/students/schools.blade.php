@@ -52,7 +52,7 @@
         @else
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- SD Schools -->
-                <div class="col-span-full">
+                <div class="col-span-full mt-8">
                     <h2 class="text-xl font-semibold mb-4 text-blue-600">Sekolah Dasar (SD)</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         @foreach ($schools->where('type', 'SD') as $school)

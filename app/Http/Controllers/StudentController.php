@@ -27,9 +27,24 @@ class StudentController extends Controller
     /**
      * Display the students of a specific school.
      */
-    public function schoolStudents(School $school)
+    public function schoolStudents(Request $request, School $school)
     {
-        $students = $school->students()->paginate(15);
+        $search = $request->input('search');
+        
+        $students = $school->students()
+            ->when($search, function($query) use ($search) {
+                $query->where(function($q) use ($search) {
+                    $q->where('name', 'like', '%' . $search . '%')
+                      ->orWhere('nik', 'like', '%' . $search . '%')
+                      ->orWhere('class', 'like', '%' . $search . '%')
+                      ->orWhere('guardian_name', 'like', '%' . $search . '%')
+                      ->orWhere('guardian_nik', 'like', '%' . $search . '%');
+                });
+            })
+            ->orderBy('name')
+            ->paginate(15)
+            ->withQueryString();
+            
         return view('students.index', compact('school', 'students'));
     }
 
