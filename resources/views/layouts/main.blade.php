@@ -20,7 +20,7 @@
         <div class="fixed inset-y-0 left-0 z-30 w-64 bg-white shadow-lg transform transition-transform duration-300" 
              :class="{ '-translate-x-full': !sidebarOpen, 'translate-x-0': sidebarOpen }">
             <div class="flex items-center justify-center h-16 border-b">
-                <h1 class="text-xl font-bold">EMR System</h1>
+                <h1 class="text-xl font-bold">GezioCare</h1>
             </div>
             <nav class="mt-6">
                 <a href="{{ route('dashboard') }}" class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-100">
