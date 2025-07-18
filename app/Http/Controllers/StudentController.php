@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\School;
 use App\Models\Student;
+use App\Exports\StudentsExport;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class StudentController extends Controller
 {
@@ -141,5 +144,32 @@ class StudentController extends Controller
 
         return redirect()->route('students.school', $school)
             ->with('success', 'Data siswa berhasil dihapus.');
+    }
+
+    /**
+     * Export students data to Excel
+     */
+    public function exportExcel(School $school)
+    {
+        return Excel::download(new StudentsExport($school), 'students-' . $school->name . '.xlsx');
+    }
+
+    /**
+     * Export students data to PDF
+     */
+    public function exportPdf(School $school)
+    {
+        $students = $school->students()->orderBy('class')->orderBy('name')->get();
+        $pdf = PDF::loadView('students.pdf', compact('school', 'students'));
+        
+        $pdf->setPaper('a4', 'landscape');
+        $pdf->setOptions([
+            'margin_left' => 5,
+            'margin_right' => 5,
+            'margin_top' => 5,
+            'margin_bottom' => 5,
+        ]);
+        
+        return $pdf->download('students-' . $school->name . '.pdf');
     }
 }

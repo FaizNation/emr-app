@@ -15,10 +15,31 @@
                 <h1 class="text-2xl font-bold">Skrining Kesehatan</h1>
                 <p class="text-gray-600">{{ $school->name }}</p>
             </div>
-            <a href="{{ route('screenings.create', $school) }}"
-                class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
-                Tambah Skrining
-            </a>
+            <div class="flex items-center space-x-2">
+                <a href="{{ route('screenings.export.excel', $school) }}"
+                    class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-green-700 flex items-center">
+                    <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    Export Excel
+                </a>
+                <a href="{{ route('screenings.export.pdf', $school) }}"
+                    class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 flex items-center">
+                    <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    Export PDF
+                </a>
+                <a href="{{ route('screenings.create', $school) }}"
+                    class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 flex items-center">
+                    <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    Tambah Skrining
+                </a>
+            </div>
         </div>
 
         <div class="bg-white shadow-sm rounded-lg overflow-hidden">

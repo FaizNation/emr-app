@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\School;
 use App\Models\Student;
 use App\Models\Screening;
+use App\Exports\ScreeningsExport;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ScreeningController extends Controller
 {
@@ -148,5 +151,32 @@ class ScreeningController extends Controller
         return redirect()
             ->route('screenings.school', $school)
             ->with('success', 'Data skrining berhasil dihapus.');
+    }
+
+    /**
+     * Export screenings data to Excel
+     */
+    public function exportExcel(School $school)
+    {
+        return Excel::download(new ScreeningsExport($school), 'screenings-' . $school->name . '.xlsx');
+    }
+
+    /**
+     * Export screenings data to PDF
+     */
+    public function exportPdf(School $school)
+    {
+        $screenings = $school->screenings()->with('student')->get();
+        $pdf = PDF::loadView('screenings.pdf', compact('school', 'screenings'));
+
+        $pdf->setPaper('a4', 'landscape');
+        $pdf->setOptions([
+            'margin_left' => 5,
+            'margin_right' => 5,
+            'margin_top' => 5,
+            'margin_bottom' => 5,
+        ]);
+        
+        return $pdf->download('screenings-' . $school->name . '.pdf');
     }
 }

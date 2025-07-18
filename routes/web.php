@@ -21,6 +21,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Students Management
     Route::get('/students', [StudentController::class, 'index'])->name('students.index');
     Route::get('/schools/{school}/students', [StudentController::class, 'schoolStudents'])->name('students.school');
+    Route::get('/schools/{school}/students/export/excel', [StudentController::class, 'exportExcel'])->name('students.export.excel');
+    Route::get('/schools/{school}/students/export/pdf', [StudentController::class, 'exportPdf'])->name('students.export.pdf');
     Route::get('/schools/{school}/students/create', [StudentController::class, 'create'])->name('students.create');
     Route::post('/schools/{school}/students', [StudentController::class, 'store'])->name('students.store');
     Route::get('/schools/{school}/students/{student}', [StudentController::class, 'show'])->name('students.show');
@@ -52,6 +54,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/screenings/{school}', [ScreeningController::class, 'store'])->name('screenings.store');
     Route::get('/screenings/{school}/{screening}', [ScreeningController::class, 'show'])->name('screenings.show');
     Route::get('/screenings/{school}/{screening}/edit', [ScreeningController::class, 'edit'])->name('screenings.edit');
+    Route::get('/screenings/{school}/export/excel', [ScreeningController::class, 'exportExcel'])->name('screenings.export.excel');
+    Route::get('/screenings/{school}/export/pdf', [ScreeningController::class, 'exportPdf'])->name('screenings.export.pdf');
     Route::put('/screenings/{school}/{screening}', [ScreeningController::class, 'update'])->name('screenings.update');
     Route::delete('/screenings/{school}/{screening}', [ScreeningController::class, 'destroy'])->name('screenings.destroy');
 });
