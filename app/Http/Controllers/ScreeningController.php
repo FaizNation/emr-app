@@ -7,6 +7,7 @@ use App\Models\Student;
 use App\Models\Screening;
 use App\Exports\ScreeningsExport;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -118,27 +119,42 @@ class ScreeningController extends Controller
      */
     public function update(Request $request, School $school, Screening $screening)
     {
-        $validated = $request->validate([
-            'weight' => 'required|numeric|min:0|max:999.99',
-            'height' => 'required|numeric|min:0|max:999.99',
-            'lpimt' => 'required|numeric|min:0|max:999.99',
-            'nutrition_status' => 'required|string',
-            'blood_pressure' => 'required|string',
-            'vision_right' => 'required|string',
-            'vision_left' => 'required|string',
-            'hearing' => 'required|string',
-            'dental' => 'required|string',
-            'anemia' => 'required|string',
-            'disability' => 'required|string',
-            'fitness' => 'required|string',
-            'referral' => 'nullable|string'
-        ]);
+        try {
+            $validated = $request->validate([
+                'weight' => 'required|numeric|min:0|max:999.99',
+                'height' => 'required|numeric|min:0|max:999.99',
+                'bmi' => 'required|numeric|min:0|max:99.99',
+                'waist_circumference' => 'required|numeric|min:0|max:999.99',
+                'nutritional_status' => 'required|string|max:255',
+                'blood_pressure' => 'required|string|max:255',
+                'vision_right' => 'required|string|max:255',
+                'vision_left' => 'required|string|max:255',
+                'hearing' => 'required|string|max:255',
+                'dental' => 'required|string|max:255',
+                'hemoglobin' => 'required|numeric|min:0|max:30',
+                'disability' => 'required|string|max:255',
+                'fitness' => 'required|boolean',
+                'referral' => 'nullable|string'
+            ]);
 
-        $screening->update($validated);
+            Log::info('Validated data:', $validated);
+            $screening->update($validated);
 
-        return redirect()
-            ->route('screenings.school', $school)
-            ->with('success', 'Data skrining berhasil diperbarui.');
+            return redirect()
+                ->route('screenings.school', $school)
+                ->with('success', 'Data skrining berhasil diperbarui.');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('Validation error:', ['errors' => $e->errors()]);
+            return redirect()->back()
+                ->withErrors($e->validator)
+                ->withInput()
+                ->with('error', 'Mohon periksa kembali data yang dimasukkan.');
+        } catch (\Exception $e) {
+            Log::error('Error updating screening: ' . $e->getMessage());
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
 
     /**

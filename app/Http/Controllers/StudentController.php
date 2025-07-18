@@ -6,6 +6,7 @@ use App\Models\School;
 use App\Models\Student;
 use App\Exports\StudentsExport;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -116,23 +117,45 @@ class StudentController extends Controller
      */
     public function update(Request $request, School $school, Student $student)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'nik' => 'required|string|unique:students,nik,' . $student->id,
-            'birth_place' => 'required|string|max:255',
-            'birth_date' => 'required|date',
-            'gender' => 'required|in:L,P',
-            'address' => 'required|string',
-            'class' => 'required|string|max:255',
-            'guardian_name' => 'required|string|max:255',
-            'guardian_nik' => 'required|string',
-            'phone' => 'required|string|max:255',
-        ]);
+        try {
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'nik' => 'required|string|unique:students,nik,' . $student->id,
+                'birth_place' => 'required|string|max:255',
+                'birth_date' => 'required|date',
+                'gender' => 'required|in:L,P',
+                'address' => 'required|string',
+                'class' => 'required|string|max:255',
+                'guardian_name' => 'required|string|max:255',
+                'guardian_nik' => 'required|string',
+                'phone' => 'required|string|max:255',
+            ]);
 
-        $student->update($validated);
+            Log::info('Attempting to update student:', ['student_id' => $student->id, 'data' => $validated]);
+            $student->update($validated);
+            Log::info('Student updated successfully:', ['student_id' => $student->id]);
 
-        return redirect()->route('students.school', $school)
-            ->with('success', 'Data siswa berhasil diperbarui.');
+            return redirect()->route('students.school', $school)
+                ->with('success', 'Data siswa berhasil diperbarui.');
+                
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('Validation error when updating student:', [
+                'student_id' => $student->id,
+                'errors' => $e->errors()
+            ]);
+            return redirect()->back()
+                ->withErrors($e->validator)
+                ->withInput()
+                ->with('error', 'Mohon periksa kembali data yang dimasukkan.');
+        } catch (\Exception $e) {
+            Log::error('Error updating student:', [
+                'student_id' => $student->id,
+                'error' => $e->getMessage()
+            ]);
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
 
     /**
