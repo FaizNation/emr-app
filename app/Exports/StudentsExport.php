@@ -58,13 +58,13 @@ class StudentsExport implements FromCollection, WithHeadings, WithMapping, WithS
         return [
             $this->rowNumber,
             $student->name,
-            \PhpOffice\PhpSpreadsheet\Shared\StringHelper::formatNumber($student->nik),
+            " " . $student->nik,
             $student->class,
             $student->gender == 'L' ? 'Laki-laki' : 'Perempuan',
             \Carbon\Carbon::parse($student->birth_date)->format('d/m/Y'),
             $student->birth_place,
             $student->guardian_name,
-            $student->guardian_nik,
+            " " . $student->guardian_nik,
             $student->phone
         ];
     }
