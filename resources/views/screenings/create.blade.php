@@ -3,31 +3,36 @@
 @section('title', 'Tambah Skrining - ' . $school->name)
 
 @section('content')
-    <div class="container mx-auto">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="max-w-3xl mx-auto">
             <div class="mb-6">
-                <a href="{{ route('screenings.school', $school) }}" class="text-gray-600 hover:text-gray-900">
-                    ← Kembali ke Daftar Skrining
+                <a href="{{ route('screenings.school', $school) }}"
+                    class="inline-flex items-center text-gray-600 hover:text-gray-900">
+                    <i class="mdi mdi-arrow-left mr-2"></i>
+                    <span>Kembali ke Daftar Skrining</span>
                 </a>
             </div>
 
-            <div class="flex justify-between items-center mb-6">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
                 <div>
-                    <h1 class="text-2xl font-bold">Tambah Skrining Kesehatan</h1>
-                    <p class="text-gray-600">{{ $school->name }}</p>
+                    <h1 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-0">Tambah Skrining Kesehatan</h1>
+                    <p class="text-sm sm:text-base text-gray-600">{{ $school->name }}</p>
                 </div>
             </div>
 
             <div class="bg-white shadow-sm rounded-lg overflow-hidden">
-                <form action="{{ route('screenings.store', $school) }}" method="POST" class="p-6">
+                <form action="{{ route('screenings.store', $school) }}" method="POST" class="p-4 sm:p-6">
                     @csrf
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                         <!-- Siswa -->
-                        <div class="col-span-2">
-                            <label for="student_id" class="block text-sm font-medium text-gray-700">Siswa</label>
+                        <div class="col-span-1 sm:col-span-2">
+                            <label for="student_id" class="block text-sm font-medium text-gray-700 mb-1">
+                                <i class="mdi mdi-account-school mr-1"></i>
+                                Siswa
+                            </label>
                             <select name="student_id" id="student_id"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm sm:text-base"
                                 required>
                                 <option value="">Pilih Siswa</option>
                                 @foreach ($students as $student)
@@ -39,28 +44,42 @@
                                 @endforeach
                             </select>
                             @if ($students->isEmpty())
-                                <p class="mt-2 text-sm text-red-600">Semua siswa di sekolah ini sudah memiliki data
-                                    skrining.</p>
+                                <p class="mt-2 text-sm text-red-600 flex items-center">
+                                    <i class="mdi mdi-alert mr-1"></i>
+                                    Semua siswa di sekolah ini sudah memiliki data skrining.
+                                </p>
                             @endif
                         </div>
 
                         <!-- BB & TB -->
-                        <div>
-                            <label for="weight" class="block text-sm font-medium text-gray-700">Berat Badan (kg)</label>
+                        <div class="relative">
+                            <label for="weight" class="block text-sm font-medium text-gray-700 mb-1">
+                                <i class="mdi mdi-scale mr-1"></i>
+                                Berat Badan (kg)
+                            </label>
                             <input type="number" step="0.1" name="weight" id="weight" value="{{ old('weight') }}"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm sm:text-base pl-8"
                                 required>
+                            <div class="absolute inset-y-0 left-0 pt-6 pl-2 pointer-events-none text-gray-500">
+                                kg
+                            </div>
                         </div>
 
-                        <div>
-                            <label for="height" class="block text-sm font-medium text-gray-700">Tinggi Badan (cm)</label>
+                        <div class="relative">
+                            <label for="height" class="block text-sm font-medium text-gray-700 mb-1">
+                                <i class="mdi mdi-human-male-height mr-1"></i>
+                                Tinggi Badan (cm)
+                            </label>
                             <input type="number" step="0.1" name="height" id="height" value="{{ old('height') }}"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm sm:text-base pl-8"
                                 required>
+                            <div class="absolute inset-y-0 left-0 pt-6 pl-2 pointer-events-none text-gray-500">
+                                cm
+                            </div>
                         </div>
 
                         <div>
-                            <label for="waist_circumference" class="block text-sm font-medium text-gray-700"> Badan
+                            <label for="waist_circumference" class="block text-sm font-medium text-gray-700"> lingkar Badan
                                 (cm)</label>
                             <input type="number" step="0.1" name="waist_circumference" id="waist_circumference"
                                 value="{{ old('waist_circumference') }}"
@@ -170,11 +189,14 @@
 
                     </div>
 
-                    <div class="mt-6">
-                        <button type="submit"
-                            class="w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
-                            Simpan Data Skrining
-                        </button>
+                    <div class="mt-6 space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                            <button type="submit"
+                                class="w-full sm:w-auto bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 flex items-center justify-center">
+                                <i class="mdi mdi-content-save mr-2"></i>
+                                Simpan Data Skrining
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>

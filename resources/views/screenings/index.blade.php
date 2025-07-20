@@ -16,19 +16,15 @@
                 <p class="text-gray-600">{{ $school->name }}</p>
             </div>
             <div class="flex items-center space-x-2">
-                <a href="{{ route('screenings.export.excel', $school) }}"
-                    class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-green-700 flex items-center">
-                    <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
+                <a style="background-color: rgb(29, 111, 66) !important"  href="{{ route('screenings.export.excel', $school) }}"
+                    class="mr-2 text-white px-4 py-2 rounded-md hover:bg-green-600 flex items-center">
+                    <i class="mdi mdi-microsoft-excel text-xl mr-2"></i>
                     Export Excel
                 </a>
-                <a href="{{ route('screenings.export.pdf', $school) }}"
-                    class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 flex items-center">
-                    <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                <a style="background-color: red !important" href="{{ route('screenings.export.pdf', $school) }}"
+                    class="mr-2 text-white px-4 py-2 rounded-md hover:bg-red-600 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6" class="w-5 h-5 mr-2">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
                     </svg>
                     Export PDF
                 </a>
@@ -58,7 +54,7 @@
                                     colspan="3">Informasi Tambahan</th>
                             </tr>
                             <tr class="divide-x divide-stone-950">
-                                <!-- Informasi Siswa - Gray -->
+
                                 <th
                                     class="px-4 py-3 bg-gray-100 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">
                                     No</th>
@@ -68,7 +64,7 @@
                                 <th
                                     class="px-6 py-3 bg-gray-100 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r-2 border-gray-300">
                                     Kelas</th>
-                                <!-- Pertumbuhan - Blue -->
+
                                 <th
                                     class="px-6 py-3 bg-blue-100 text-center text-xs font-medium text-gray-600 uppercase tracking-wider border-r border-gray-200">
                                     BB</th>
@@ -87,7 +83,7 @@
                                 <th
                                     class="px-6 py-3 bg-blue-100 text-center text-xs font-medium text-gray-600 uppercase tracking-wider">
                                     Tekanan Darah</th>
-                                <!-- Skrining Indera - Green -->
+
                                 <th
                                     class="px-6 py-3 bg-green-100 text-center text-xs font-medium text-gray-600 uppercase tracking-wider">
                                     Penglihatan Kanan</th>
@@ -109,7 +105,7 @@
                                 <th
                                     class="px-6 py-3 bg-green-100 text-center text-xs font-medium text-gray-600 uppercase tracking-wider">
                                     Kebugaran</th>
-                                <!-- Informasi Tambahan - Gray -->
+
                                 <th
                                     class="px-6 py-3 bg-gray-100 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Rujuk</th>
@@ -124,7 +120,7 @@
                         <tbody class="bg-white divide-y divide-stone-950">
                             @forelse($screenings as $key => $screening)
                                 <tr class="divide-x divide-stone-950">
-                                    <!-- Informasi Siswa - Gray -->
+
                                     <td
                                         class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 bg-gray-50 border-r border-gray-200">
                                         {{ $screenings->firstItem() + $key }}</td>
@@ -134,7 +130,7 @@
                                     <td
                                         class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 bg-gray-50 border-r-2 border-gray-300">
                                         {{ $screening->student->class }}</td>
-                                    <!-- Pertumbuhan - Blue -->
+
                                     <td
                                         class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 bg-blue-50 border-r border-gray-200">
                                         {{ $screening->weight }}</td>
@@ -153,7 +149,7 @@
                                     <td
                                         class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 bg-blue-50 border-r-2 border-gray-300">
                                         {{ $screening->blood_pressure }}</td>
-                                    <!-- Skrining Indera - Green -->
+
                                     <td
                                         class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 bg-green-50 border-r border-gray-200">
                                         {{ $screening->vision_right }}</td>
@@ -179,7 +175,7 @@
                                             {{ $screening->fitness == 1 ? 'Bugar' : 'Tidak Bugar' }}
                                         </span>
                                     </td>
-                                    <!-- Informasi Tambahan - Gray -->
+
                                     <td
                                         class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 bg-gray-50 border-r border-gray-200">
                                         {{ $screening->referral }}</td>

@@ -16,26 +16,32 @@
                 <p class="text-gray-600">{{ $school->name }}</p>
             </div>
             <div class="flex items-center space-x-4">
-                <a href="{{ route('students.export.excel', $school) }}"
-                    class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 flex items-center">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
+                <a style="background-color: rgb(29, 111, 66) !important" href="{{ route('students.export.excel', $school) }}"
+                    class="mr-2 text-white px-4 py-2 rounded-md hover:bg-green-600 flex items-center">
+                    <i class="mdi mdi-microsoft-excel text-xl mr-2"></i>
                     Export Excel
                 </a>
-                <a href="{{ route('students.export.pdf', $school) }}"
-                    class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 flex items-center">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                <a style="background-color: red !important" href="{{ route('students.export.pdf', $school) }}"
+                    class="mr-2 text-white px-4 py-2 rounded-md hover:bg-red-600 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6" class="w-5 h-5 mr-2">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
                     </svg>
                     Export PDF
                 </a>
                 <a href="{{ route('students.create', $school) }}"
-                    class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
-                    Tambah Siswa
+                   class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 flex items-center">
+                   <svg xmlns="http://www.w3.org/2000/svg" 
+                        fill="none" 
+                        viewBox="0 0 24 24" 
+                        stroke-width="1.5" 
+                        stroke="currentColor" 
+                        class="w-5 h-5 mr-2">
+                     <path stroke-linecap="round" stroke-linejoin="round" 
+                           d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                   </svg>
+                   Tambah Siswa
                 </a>
+
             </div>
         </div>
 

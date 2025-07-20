@@ -14,6 +14,9 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
+
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -29,19 +32,24 @@
                 <h1 class="text-xl font-bold">GezioCare</h1>
             </div>
             <nav class="mt-6">
-                <a href="{{ route('dashboard') }}" class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-100">
+                <a href="{{ route('dashboard') }}"
+                    class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-100 {{ request()->routeIs('dashboard') ? 'bg-gray-100' : '' }}">
+                    <i class="mdi mdi-view-dashboard text-xl"></i>
                     <span class="mx-3">Dashboard</span>
                 </a>
                 <a href="{{ route('schools.index') }}"
-                    class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-100">
+                    class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-100 {{ request()->routeIs('schools.*') ? 'bg-gray-100' : '' }}">
+                    <i class="mdi mdi-school text-xl"></i>
                     <span class="mx-3">Daftar Sekolah</span>
                 </a>
                 <a href="{{ route('students.index') }}"
-                    class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-100">
+                    class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-100 {{ request()->routeIs('students.*') ? 'bg-gray-100' : '' }}">
+                    <i class="mdi mdi-account-group text-xl"></i>
                     <span class="mx-3">Daftar Siswa</span>
                 </a>
                 <a href="{{ route('screenings.index') }}"
-                    class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-100">
+                    class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-100 {{ request()->routeIs('screenings.*') ? 'bg-gray-100' : '' }}">
+                    <i class="mdi mdi-clipboard-pulse text-xl"></i>
                     <span class="mx-3">Skrining Kesehatan</span>
                 </a>
             </nav>
