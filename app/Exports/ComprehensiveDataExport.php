@@ -19,9 +19,80 @@ class ComprehensiveDataExport implements FromCollection, WithHeadings, WithStyle
 {
     protected int $rowNumber = 0;
 
+    protected $academicYear;
+    protected $search;
+    protected $schoolType;
+    protected $screeningStatus;
+    protected $sort;
+
+    public function __construct($academicYear = null, $search = null, $schoolType = null, $screeningStatus = null, $sort = null)
+    {
+        $this->academicYear = $academicYear ?? now()->year;
+        $this->search = $search;
+        $this->schoolType = $schoolType;
+        $this->screeningStatus = $screeningStatus;
+        $this->sort = $sort;
+    }
+
     public function collection()
     {
-        return Student::with(['school', 'screening'])->get();
+        $query = Student::with(['school', 'screening'])
+            ->where('academic_year', $this->academicYear);
+
+        // Apply search filter
+        if ($this->search) {
+            $query->where(function($q) {
+                $q->where('name', 'like', '%' . $this->search . '%')
+                    ->orWhereHas('school', function($q) {
+                        $q->where('name', 'like', '%' . $this->search . '%');
+                    });
+            });
+        }
+
+        // Apply school type filter
+        if ($this->schoolType) {
+            $query->whereHas('school', function($q) {
+                $q->where('type', $this->schoolType);
+            });
+        }
+
+        // Apply screening status filter
+        if ($this->screeningStatus !== null) {
+            if ($this->screeningStatus == '1') {
+                $query->has('screening');
+            } else {
+                $query->doesntHave('screening');
+            }
+        }
+
+        // Apply sorting
+        if ($this->sort) {
+            if (strpos($this->sort, 'school_id_') === 0) {
+                $schoolId = substr($this->sort, 10);
+                $query->where('school_id', $schoolId);
+            } else {
+                switch ($this->sort) {
+                    case 'name_asc':
+                        $query->orderBy('name', 'asc');
+                        break;
+                    case 'name_desc':
+                        $query->orderBy('name', 'desc');
+                        break;
+                    case 'school_asc':
+                        $query->join('schools', 'students.school_id', '=', 'schools.id')
+                            ->orderBy('schools.name', 'asc')
+                            ->select('students.*');
+                        break;
+                    case 'school_desc':
+                        $query->join('schools', 'students.school_id', '=', 'schools.id')
+                            ->orderBy('schools.name', 'desc')
+                            ->select('students.*');
+                        break;
+                }
+            }
+        }
+
+        return $query->get();
     }
 
     public function headings(): array
@@ -130,13 +201,15 @@ class ComprehensiveDataExport implements FromCollection, WithHeadings, WithStyle
             AfterSheet::class => function(AfterSheet $event) {
                 $sheet = $event->sheet;
 
-                $sheet->getDelegate()->insertNewRowBefore(1, 3);
+                $sheet->getDelegate()->insertNewRowBefore(1, 4);
 
                 $sheet->getDelegate()->mergeCells('A1:AB1');
                 $sheet->getDelegate()->mergeCells('A2:AB2');
                 $sheet->getDelegate()->mergeCells('A3:AB3');
+                $sheet->getDelegate()->mergeCells('A4:AB4');
 
                 $sheet->setCellValue('A1', 'DATA HASIL SKRINING KESEHATAN SISWA');
+                $sheet->setCellValue('A2', 'TAHUN AJARAN ' . $this->academicYear . '/' . ($this->academicYear + 1));
                 $sheet->setCellValue('A3', 'Tanggal Export: ' . now()->locale('id')->isoFormat('DD MMMM YYYY HH:mm:ss'));
 
                 $titleStyles = [
@@ -175,30 +248,15 @@ class ComprehensiveDataExport implements FromCollection, WithHeadings, WithStyle
                     ]
                 ];
 
-                $dataHeaderStyles = [
-                    'font' => [
-                        'bold' => true,
-                        'color' => ['rgb' => 'FFFFFF'],
-                    ],
-                    'fill' => [
-                        'fillType' => Fill::FILL_SOLID,
-                        'color' => ['rgb' => '4472C4']
-                    ],
-                    'alignment' => [
-                        'horizontal' => Alignment::HORIZONTAL_CENTER,
-                        'vertical' => Alignment::VERTICAL_CENTER
-                    ]
-                ];
-
                 $sheet->getDelegate()->getStyle('A1')->applyFromArray($titleStyles);
                 $sheet->getDelegate()->getStyle('A2')->applyFromArray($subtitleStyles);
-                $sheet->getDelegate()->getStyle('A3')->applyFromArray($dateStyles);
-                $sheet->getDelegate()->getStyle('A4:AB4')->applyFromArray($dataHeaderStyles);
+                $sheet->getDelegate()->getStyle('A3')->applyFromArray($subtitleStyles);
+                $sheet->getDelegate()->getStyle('A4')->applyFromArray($dateStyles);
 
                 $sheet->getDelegate()->getRowDimension(1)->setRowHeight(30);
                 $sheet->getDelegate()->getRowDimension(2)->setRowHeight(30);
                 $sheet->getDelegate()->getRowDimension(3)->setRowHeight(30);
-                $sheet->getDelegate()->getRowDimension(4)->setRowHeight(25);
+                $sheet->getDelegate()->getRowDimension(4)->setRowHeight(30);
             }
         ];
     }

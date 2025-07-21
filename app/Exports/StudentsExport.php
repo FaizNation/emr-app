@@ -18,17 +18,19 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 class StudentsExport implements FromCollection, WithHeadings, WithMapping, WithStyles, WithEvents, ShouldAutoSize
 {
     protected $school;
+    protected $academicYear;
+    protected $rowNumber = 0;
 
-    public function __construct(School $school)
+    public function __construct(School $school, $academicYear)
     {
         $this->school = $school;
+        $this->academicYear = $academicYear;
     }
-
-    protected $rowNumber = 0;
 
     public function collection()
     {
         return Student::where('school_id', $this->school->id)
+            ->where('academic_year', $this->academicYear)
             ->orderBy('class')
             ->orderBy('name')
             ->get();

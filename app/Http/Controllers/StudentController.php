@@ -31,9 +31,30 @@ class StudentController extends Controller
     /**
      * Display the students of a specific school.
      */
+    protected function getCurrentAcademicYear()
+    {
+        $now = now();
+        $year = $now->year;
+        // Jika bulan saat ini adalah Juli atau setelahnya, maka tahun ajaran baru dimulai
+        if ($now->month >= 7) {
+            return $year;
+        }
+        // Jika bulan saat ini sebelum Juli, maka masih tahun ajaran sebelumnya
+        return $year - 1;
+    }
+
     public function schoolStudents(Request $request, School $school)
     {
         $search = $request->input('search');
+        $currentAcademicYear = $request->input('academic_year', $this->getCurrentAcademicYear());
+        
+        // Prepare academic years for dropdown
+        $academicYears = [];
+        $startYear = 2025; // Tahun pertama sistem digunakan
+        $endYear = now()->year + 1; // Satu tahun ke depan
+        for ($year = $startYear; $year <= $endYear; $year++) {
+            $academicYears[$year] = $year . '/' . ($year + 1);
+        }
         
         $students = $school->students()
             ->when($search, function($query) use ($search) {
@@ -45,11 +66,12 @@ class StudentController extends Controller
                       ->orWhere('guardian_nik', 'like', '%' . $search . '%');
                 });
             })
+            ->where('academic_year', $currentAcademicYear)
             ->orderBy('name')
             ->paginate(15)
             ->withQueryString();
             
-        return view('students.index', compact('school', 'students'));
+    return view('students.index', compact('school', 'students', 'academicYears', 'currentAcademicYear')); 
     }
 
     /**
@@ -172,18 +194,25 @@ class StudentController extends Controller
     /**
      * Export students data to Excel
      */
-    public function exportExcel(School $school)
+    public function exportExcel(Request $request, School $school)
     {
-        return Excel::download(new StudentsExport($school), 'students-' . $school->name . '.xlsx');
+        $academicYear = $request->input('academic_year', $this->getCurrentAcademicYear());
+        $filename = 'siswa-' . $school->name . '-TA-' . $academicYear . '-' . ($academicYear + 1) . '.xlsx';
+        return Excel::download(new StudentsExport($school, $academicYear), $filename);
     }
 
     /**
      * Export students data to PDF
      */
-    public function exportPdf(School $school)
+    public function exportPdf(Request $request, School $school)
     {
-        $students = $school->students()->orderBy('class')->orderBy('name')->get();
-        $pdf = PDF::loadView('students.pdf', compact('school', 'students'));
+        $academicYear = $request->input('academic_year', $this->getCurrentAcademicYear());
+        $students = $school->students()
+            ->where('academic_year', $academicYear)
+            ->orderBy('class')
+            ->orderBy('name')
+            ->get();
+        $pdf = PDF::loadView('students.pdf', compact('school', 'students', 'academicYear'));
         
         $pdf->setPaper('a4', 'landscape');
         $pdf->setOptions([

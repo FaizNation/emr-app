@@ -14,6 +14,18 @@
                             class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 h-10">
                     </div>
 
+                    <!-- Academic Year Filter -->
+                    <div class="w-44">
+                        <select id="academic_year" name="academic_year"
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 h-10">
+                            @foreach ($academicYears as $year => $academicYear)
+                                <option value="{{ $year }}" @selected($year == $currentAcademicYear)>
+                                    TA {{ $academicYear }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
                     <!-- School Type Filter -->
                     <div class="w-44">
                         <select id="school_type" name="school_type"
@@ -190,8 +202,9 @@
                 const schoolType = schoolTypeSelect.value;
                 const screeningStatus = screeningStatusSelect.value;
                 const sortBy = document.getElementById('sort_by').value;
+                const academicYear = document.getElementById('academic_year').value;
 
-                fetch(`{{ route('comprehensive.search') }}?search=${searchValue}&school_type=${schoolType}&screening_status=${screeningStatus}&sort=${sortBy}`, {
+                fetch(`{{ route('comprehensive.search') }}?search=${searchValue}&school_type=${schoolType}&screening_status=${screeningStatus}&sort=${sortBy}&academic_year=${academicYear}`, {
                         headers: {
                             'X-Requested-With': 'XMLHttpRequest'
                         }
@@ -215,6 +228,7 @@
             schoolTypeSelect.addEventListener('change', performSearch);
             screeningStatusSelect.addEventListener('change', performSearch);
             document.getElementById('sort_by').addEventListener('change', performSearch);
+            document.getElementById('academic_year').addEventListener('change', performSearch);
 
             // Update export link with current parameters
             function updateExportLink() {
@@ -222,6 +236,7 @@
                 const schoolType = schoolTypeSelect.value;
                 const screeningStatus = screeningStatusSelect.value;
                 const sortBy = document.getElementById('sort_by').value;
+                const academicYear = document.getElementById('academic_year').value;
 
                 const exportLink = document.getElementById('export-excel');
                 const baseUrl = "{{ route('comprehensive.export.excel') }}";
@@ -231,6 +246,7 @@
                 if (schoolType) params.append('school_type', schoolType);
                 if (screeningStatus) params.append('screening_status', screeningStatus);
                 if (sortBy) params.append('sort', sortBy);
+                if (academicYear) params.append('academic_year', academicYear);
 
                 exportLink.href = `${baseUrl}?${params.toString()}`;
             }
@@ -240,6 +256,7 @@
             schoolTypeSelect.addEventListener('change', updateExportLink);
             screeningStatusSelect.addEventListener('change', updateExportLink);
             document.getElementById('sort_by').addEventListener('change', updateExportLink);
+            document.getElementById('academic_year').addEventListener('change', updateExportLink);
         });
     </script>
 @endsection

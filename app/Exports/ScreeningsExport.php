@@ -17,16 +17,21 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 class ScreeningsExport implements FromCollection, WithHeadings, WithMapping, WithStyles, WithEvents
 {
     protected $school;
+    protected $academicYear;
 
-    public function __construct(School $school)
+    public function __construct(School $school, $academicYear)
     {
         $this->school = $school;
+        $this->academicYear = $academicYear;
     }
 
     public function collection()
     {
         return Screening::where('school_id', $this->school->id)
             ->with('student')
+            ->whereHas('student', function($query) {
+                $query->where('academic_year', $this->academicYear);
+            })
             ->get();
     }
 

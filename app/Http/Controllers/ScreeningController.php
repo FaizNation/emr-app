@@ -7,6 +7,7 @@ use App\Models\Student;
 use App\Models\Screening;
 use App\Exports\ScreeningsExport;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -35,14 +36,39 @@ class ScreeningController extends Controller
         return view('screenings.schools', compact('schools', 'search'));
     }
 
-    public function school(School $school)
+    protected function getCurrentAcademicYear()
     {
+        $now = now();
+        $year = $now->year;
+        // Jika bulan saat ini adalah Juli atau setelahnya, maka tahun ajaran baru dimulai
+        if ($now->month >= 7) {
+            return $year;
+        }
+        // Jika bulan saat ini sebelum Juli, maka masih tahun ajaran sebelumnya
+        return $year - 1;
+    }
+
+    public function school(Request $request, School $school)
+    {
+        $currentAcademicYear = $request->input('academic_year', $this->getCurrentAcademicYear());
+        
+        // Prepare academic years for dropdown
+        $academicYears = [];
+        $startYear = 2025; // Tahun pertama sistem digunakan
+        $endYear = now()->year + 1; // Satu tahun ke depan
+        for ($year = $startYear; $year <= $endYear; $year++) {
+            $academicYears[$year] = $year . '/' . ($year + 1);
+        }
+
         $screenings = $school->screenings()
             ->with('student')
+            ->whereHas('student', function($query) use ($currentAcademicYear) {
+                $query->where('academic_year', $currentAcademicYear);
+            })
             ->latest()
             ->paginate(10);
 
-        return view('screenings.index', compact('school', 'screenings'));
+        return view('screenings.index', compact('school', 'screenings', 'academicYears', 'currentAcademicYear'));
     }
 
     /**
@@ -172,18 +198,26 @@ class ScreeningController extends Controller
     /**
      * Export screenings data to Excel
      */
-    public function exportExcel(School $school)
+    public function exportExcel(Request $request, School $school)
     {
-        return Excel::download(new ScreeningsExport($school), 'screenings-' . $school->name . '.xlsx');
+        $academicYear = $request->input('academic_year', $this->getCurrentAcademicYear());
+        $filename = 'skrining-' . $school->name . '-TA-' . $academicYear . '-' . ($academicYear + 1) . '.xlsx';
+        return Excel::download(new ScreeningsExport($school, $academicYear), $filename);
     }
 
     /**
      * Export screenings data to PDF
      */
-    public function exportPdf(School $school)
+    public function exportPdf(Request $request, School $school)
     {
-        $screenings = $school->screenings()->with('student')->get();
-        $pdf = PDF::loadView('screenings.pdf', compact('school', 'screenings'));
+        $academicYear = $request->input('academic_year', $this->getCurrentAcademicYear());
+        $screenings = $school->screenings()
+            ->with('student')
+            ->whereHas('student', function($query) use ($academicYear) {
+                $query->where('academic_year', $academicYear);
+            })
+            ->get();
+        $pdf = PDF::loadView('screenings.pdf', compact('school', 'screenings', 'academicYear'));
 
         $pdf->setPaper('a4', 'landscape');
         $pdf->setOptions([

@@ -20,7 +20,8 @@ class Student extends Model
         'phone',
         'address',
         'guardian_name',
-        'guardian_nik'
+        'guardian_nik',
+        'academic_year'
     ];
 
     protected $casts = [
