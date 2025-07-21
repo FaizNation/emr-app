@@ -70,88 +70,95 @@
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead>
-                            <tr>
+                            <tr class="divide-x divide-stone-950 ">
                                 <th
-                                    class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200"">
                                     No
                                 </th>
                                 <th
-                                    class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200"">
                                     Nama
                                 </th>
                                 <th
-                                    class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200"">
                                     NIK
                                 </th>
                                 <th
-                                    class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200"">
                                     Kelas
                                 </th>
                                 <th
-                                    class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200"">
                                     Jenis Kelamin
                                 </th>
                                 <th
-                                    class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200"">
                                     Tanggal Lahir
                                 </th>
                                 <th
-                                    class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200"">
                                     Tempat Lahir
                                 </th>
                                 <th
-                                    class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200"">
                                     Nama Wali
                                 </th>
                                 <th
-                                    class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200"">
                                     Nik Wali
                                 </th>
                                 <th
-                                    class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200"">
                                     No HP
                                 </th>
                                 <th
-                                    class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200"">
+                                    Alamat
+                                </th>
+                                <th
+                                    class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200"  ">
                                     Aksi
                                 </th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             @forelse($students as $key => $student)
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                <tr class="divide-x divide-gray-900">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-l border-r border-gray-200"">
                                         {{ $students->firstItem() + $key }}
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200"">
                                         {{ $student->name }}
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200"">
                                         {{ $student->nik }}
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200"">
                                         {{ $student->class }}
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200"">
                                         {{ $student->gender == 'L' ? 'Laki-laki' : 'Perempuan' }}
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200"">
                                         {{ \Carbon\Carbon::parse($student->birth_date)->format('d M Y') }}
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200"">
                                         {{ $student->birth_place }}
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200"">
                                         {{ $student->guardian_name }}
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200"">
                                         {{ $student->guardian_nik }}
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200"">
                                         {{ $student->phone }}
                                     </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200"">
+                                        {{ $student->address }}
+                                    </td>
 
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium border-r border-gray-200"">
                                         <a href="{{ route('students.edit', [$school, $student]) }}"
                                             class="text-green-600 hover:text-green-900 mr-3">Edit</a>
                                         <form action="{{ route('students.destroy', [$school, $student]) }}" method="POST"
@@ -162,7 +169,7 @@
                                                 onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Hapus</button>
                                         </form>
                                     </td>
-                                </tr>
+                                </>
                             @empty
                                 <tr>
                                     <td colspan="5" class="px-6 py-4 text-center text-gray-500">

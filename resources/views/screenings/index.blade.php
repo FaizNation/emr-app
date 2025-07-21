@@ -151,7 +151,7 @@
                                         {{ $screening->blood_pressure }}</td>
 
                                     <td
-                                        class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 bg-green-50 border-r border-gray-200">
+                                        class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 bg-green-50 border-l border-r border-gray-200">
                                         {{ $screening->vision_right }}</td>
                                     <td
                                         class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 bg-green-50 border-r border-gray-200">
