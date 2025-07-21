@@ -2,19 +2,20 @@
 
 namespace App\Exports;
 
-use App\Models\Student;
 use App\Models\School;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithMapping;
-use Maatwebsite\Excel\Concerns\WithStyles;
-use Maatwebsite\Excel\Concerns\WithEvents;
+use App\Models\Student;
 use Maatwebsite\Excel\Events\AfterSheet;
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Concerns\WithStyles;
+use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class StudentsExport implements FromCollection, WithHeadings, WithMapping, WithStyles, WithEvents
+class StudentsExport implements FromCollection, WithHeadings, WithMapping, WithStyles, WithEvents, ShouldAutoSize
 {
     protected $school;
 
@@ -48,7 +49,8 @@ class StudentsExport implements FromCollection, WithHeadings, WithMapping, WithS
             'Tempat Lahir',
             'Nama Wali',
             'NIK Wali',
-            'No HP'
+            'No HP',
+            'Alamat'
         ];
     }
 
@@ -65,14 +67,15 @@ class StudentsExport implements FromCollection, WithHeadings, WithMapping, WithS
             $student->birth_place,
             $student->guardian_name,
             " " . $student->guardian_nik,
-            $student->phone
+            $student->phone,
+            $student->address
         ];
     }
 
     public function styles(Worksheet $sheet)
     {
 
-        foreach (range('E', 'J') as $column) {
+        foreach (range('E', 'K') as $column) {
             $sheet->getColumnDimension($column)->setWidth(20);
             $sheet->getStyle($column)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
         }
@@ -83,12 +86,14 @@ class StudentsExport implements FromCollection, WithHeadings, WithMapping, WithS
         $sheet->getColumnDimension('D')->setWidth(10); 
         $sheet->getColumnDimension('H')->setWidth(30); 
         $sheet->getColumnDimension('I')->setWidth(25); 
+        $sheet->getColumnDimension('k')->setWidth(30); 
         $sheet->getStyle('A')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
         $sheet->getStyle('B')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT); 
         $sheet->getStyle('C')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
         $sheet->getStyle('D')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
         $sheet->getStyle('G')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT); 
         $sheet->getStyle('H')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT); 
+        $sheet->getStyle('K')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT); 
 
         return [
             1 => ['font' => ['bold' => true]],
@@ -103,9 +108,9 @@ class StudentsExport implements FromCollection, WithHeadings, WithMapping, WithS
 
                 $sheet->getDelegate()->insertNewRowBefore(1, 3);
 
-                $sheet->getDelegate()->mergeCells('A1:J1');
-                $sheet->getDelegate()->mergeCells('A2:J2');
-                $sheet->getDelegate()->mergeCells('A3:J3');
+                $sheet->getDelegate()->mergeCells('A1:K1');
+                $sheet->getDelegate()->mergeCells('A2:K2');
+                $sheet->getDelegate()->mergeCells('A3:K3');
 
                 $sheet->setCellValue('A1', 'DATA SISWA');
                 $sheet->setCellValue('A2', strtoupper($this->school->name));
@@ -139,7 +144,7 @@ class StudentsExport implements FromCollection, WithHeadings, WithMapping, WithS
                     ]
                 ];
 
-                $sheet->getDelegate()->getStyle('A4:J4')->applyFromArray($dataHeaderStyles);
+                $sheet->getDelegate()->getStyle('A4:K4')->applyFromArray($dataHeaderStyles);
 
                 $sheet->getDelegate()->getRowDimension(1)->setRowHeight(30);
                 $sheet->getDelegate()->getRowDimension(2)->setRowHeight(30);

@@ -87,6 +87,7 @@
                 <th class="bg-gray">Nama Wali</th>
                 <th class="bg-gray">NIK Wali</th>
                 <th class="bg-gray">No HP</th>
+                <th class="bg-gray">Alamat</th>
             </tr>
         </thead>
         <tbody>
@@ -102,6 +103,7 @@
                     <td class="text-left">{{ $student->guardian_name }}</td>
                     <td>{{ $student->guardian_nik }}</td>
                     <td>{{ $student->phone }}</td>
+                    <td>{{ $student->address }}</td>
                 </tr>
             @endforeach
         </tbody>
