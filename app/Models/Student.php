@@ -42,4 +42,12 @@ class Student extends Model
     {
         return $this->hasMany(Screening::class);
     }
+
+    /**
+     * Get the latest screening for the student.
+     */
+    public function screening()
+    {
+        return $this->hasOne(Screening::class)->latestOfMany();
+    }
 }

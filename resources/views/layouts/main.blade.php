@@ -52,6 +52,11 @@
                     <i class="mdi mdi-clipboard-pulse text-xl"></i>
                     <span class="mx-3">Skrining Kesehatan</span>
                 </a>
+                <a href="{{ route('comprehensive.index') }}"
+                    class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-100 {{ request()->routeIs('comprehensive.*') ? 'bg-gray-100' : '' }}">
+                    <i class="mdi mdi-account-multiple text-xl"></i>
+                    <span class="mx-3">Data Lengkap Siswa</span>
+                </a>
             </nav>
         </div>
 

@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\ScreeningController;
+use App\Http\Controllers\ComprehensiveDataController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -44,6 +45,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Comprehensive Data routes
+    Route::get('/comprehensive', [ComprehensiveDataController::class, 'index'])->name('comprehensive.index');
+    Route::get('/comprehensive/search', [ComprehensiveDataController::class, 'search'])->name('comprehensive.search');
+    Route::get('/comprehensive/export/excel', [ComprehensiveDataController::class, 'exportExcel'])->name('comprehensive.export.excel');
+    Route::get('/comprehensive/export/pdf', [ComprehensiveDataController::class, 'exportPdf'])->name('comprehensive.export.pdf');
 });
 
 Route::middleware(['auth'])->group(function () {
