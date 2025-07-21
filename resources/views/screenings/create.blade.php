@@ -32,14 +32,13 @@
                                 Siswa
                             </label>
                             <select name="student_id" id="student_id"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm sm:text-base"
+                                class="select2-student-search mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm sm:text-base"
                                 required>
-                                <option value="">Pilih Siswa</option>
+                                <option value="">Cari nama siswa...</option>
                                 @foreach ($students as $student)
-                                    <option value="{{ $student->id }}"
+                                    <option value="{{ $student->id }}" data-class="{{ $student->class }}"
                                         {{ old('student_id') == $student->id ? 'selected' : '' }}>
-                                        {{ $student->name }} - Kelas
-                                        {{ $student->class }}
+                                        {{ $student->name }} - Kelas {{ $student->class }}
                                     </option>
                                 @endforeach
                             </select>
@@ -57,12 +56,9 @@
                                 <i class="mdi mdi-scale mr-1"></i>
                                 Berat Badan (kg)
                             </label>
-                            <input type="number" step="0.1" name="weight" id="weight" value="{{ old('weight') }}"
+                            <input type="number" step="0.1" name="weight" id="weight" value="{{ old('weight') }}" placeholder="kg"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm sm:text-base pl-8"
                                 required>
-                            <div class="absolute inset-y-0 left-0 pt-6 pl-2 pointer-events-none text-gray-500">
-                                kg
-                            </div>
                         </div>
 
                         <div class="relative">
@@ -70,12 +66,9 @@
                                 <i class="mdi mdi-human-male-height mr-1"></i>
                                 Tinggi Badan (cm)
                             </label>
-                            <input type="number" step="0.1" name="height" id="height" value="{{ old('height') }}"
+                            <input type="number" step="0.1" name="height" id="height" value="{{ old('height') }}" placeholder="cm"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm sm:text-base pl-8"
                                 required>
-                            <div class="absolute inset-y-0 left-0 pt-6 pl-2 pointer-events-none text-gray-500">
-                                cm
-                            </div>
                         </div>
 
                         <div>
@@ -203,8 +196,72 @@
         </div>
     </div>
 
+    <!-- Select2 CSS & JS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <style>
+        .select2-container--default .select2-selection--single {
+            height: 42px;
+            padding: 7px;
+            border-color: rgb(209 213 219);
+            border-radius: 0.375rem;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 42px;
+        }
+
+        .select2-container--default .select2-results__option--highlighted[aria-selected] {
+            background-color: #3b82f6;
+        }
+
+        .select2-container--default .select2-search--dropdown .select2-search__field {
+            padding: 8px;
+            border-radius: 0.375rem;
+        }
+
+        .select2-dropdown {
+            border-color: rgb(209 213 219);
+            border-radius: 0.375rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+    </style>
+
     <script>
-        // Auto calculate bmi when weight or height changes
+        // Initialize Select2 with search
+        $(document).ready(function() {
+            $('.select2-student-search').select2({
+                placeholder: 'Ketik nama siswa untuk mencari...',
+                allowClear: true,
+                width: '100%',
+                templateResult: formatStudent,
+                templateSelection: formatStudent
+            });
+        });
+
+        function formatStudent(student) {
+            if (!student.id) return student.text;
+
+            const $student = $(
+                `<div class="flex items-center">
+                     <i class="mdi mdi-account mr-2"></i>
+                        <div class="flex justify-between items-center w-full">
+                            <div class="font-medium">
+                                 ${student.text.split(' - ')[0]}
+                            </div>
+                            <div class="text-sm ml-4">
+                                  ${student.text.split(' - ')[1]}
+                            </div>
+                        </div>
+                    </div>
+`
+            );
+
+            return $student;
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             const weightInput = document.getElementById('weight');
             const heightInput = document.getElementById('height');
