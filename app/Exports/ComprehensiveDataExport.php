@@ -161,7 +161,7 @@ class ComprehensiveDataExport implements FromCollection, WithHeadings, WithStyle
             $student->screening?->dental ?? '-',
             $student->screening?->hemoglobin ?? '-',
             $student->screening?->disability ?? '-',
-            $student->screening?->fitness ? 'Bugar' : 'Tidak Bugar',
+            $student->screening?->fitness ?? '-',
             $student->screening?->referral ?? '-',
             $student->screening?->created_at->format('d/m/Y') ?? '-',
         ];

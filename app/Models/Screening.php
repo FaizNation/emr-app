@@ -14,8 +14,7 @@ class Screening extends Model
         'height' => 'decimal:2',
         'waist_circumference' => 'decimal:2',
         'bmi' => 'decimal:2',
-        'hemoglobin' => 'decimal:2',
-        'fitness' => 'boolean'
+        'hemoglobin' => 'decimal:2'
     ];
 
     protected $fillable = [

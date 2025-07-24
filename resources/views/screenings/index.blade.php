@@ -203,11 +203,8 @@
                                             class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 bg-green-50 border-r border-gray-200">
                                             {{ $screening->disability }}</td>
                                         <td
-                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 bg-green-50 border-r-2 border-gray-300">
-                                            <span
-                                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $screening->fitness == 1 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                                {{ $screening->fitness == 1 ? 'Bugar' : 'Tidak Bugar' }}
-                                            </span>
+                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 bg-green-50 border-r border-gray-200">                                            
+                                             {{ $screening->fitness }}</td>
                                         </td>
 
                                         <td

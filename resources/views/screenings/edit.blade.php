@@ -68,11 +68,27 @@
                         </div>
 
                         <div>
-                            <label for="nutritional_status" class="block text-sm font-medium text-gray-700">Status Gizi</label>
-                            <input type="text" name="nutritional_status" id="nutritional_status"
-                                value="{{ old('nutritional_status', $screening->nutritional_status) }}"
+                            <label for="nutritional_status" class="block text-sm font-medium text-gray-700">Status
+                                gizi</label>
+                            <select name="nutritional_status" id="nutritional_status"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                 required>
+                                <option value="">Pilih Status Gizi</option>
+                                <option value="Berat badan kurang"
+                                    {{ old('nutritional_status') == 'Berat badan kurang' ? 'selected' : '' }}>
+                                    Berat badan kurang
+                                </option>
+                                <option value="Normal" {{ old('nutritional_status') == 'Normal' ? 'selected' : '' }}>
+                                    Normal
+                                </option>
+                                <option value="Berat badan berlebih"
+                                    {{ old('nutritional_status') == 'Berat badan berlebih' ? 'selected' : '' }}>
+                                    Berat badan berlebih
+                                </option>
+                                <option value="Obesitas" {{ old('nutritional_status') == 'Obesitas' ? 'selected' : '' }}>
+                                    Obesitas
+                                </option>
+                            </select>
                         </div>
 
                         <div>
@@ -155,11 +171,16 @@
                             <select name="fitness" id="fitness"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                 required>
-                                <option value="">Pilih Status Kebugaran</option>
-                                <option value="1" class="text-green-600"
-                                    {{ old('fitness') == '1' ? 'selected' : '' }}>Bugar</option>
-                                <option value="0" class="text-red-600"
-                                    {{ old('fitness') == '0' ? 'selected' : '' }}>Tidak Bugar</option>
+                                <option value="">Pilih Kebugaran</option>
+                                <option value="Kurang" {{ old('fitness') == 'Kurang' ? 'selected' : '' }}>
+                                    Kurang
+                                </option>
+                                <option value="Cukup" {{ old('fitness') == 'Cukup' ? 'selected' : '' }}>
+                                    Cukup
+                                </option>
+                                <option value="Baik" {{ old('fitness') == 'Baik' ? 'selected' : '' }}>
+                                    Baik
+                                </option>
                             </select>
                         </div>
                     </div>

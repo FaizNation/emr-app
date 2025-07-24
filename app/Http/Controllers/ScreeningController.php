@@ -108,7 +108,7 @@ class ScreeningController extends Controller
             'dental' => 'required|string|max:255',
             'hemoglobin' => 'required|numeric|min:0|max:30',
             'disability' => 'required|string|max:255',
-            'fitness' => 'required|boolean',
+            'fitness' => 'required|string|in:Kurang,Cukup,Baik',
             'referral' => 'nullable|string'
         ]);
 
@@ -159,7 +159,7 @@ class ScreeningController extends Controller
                 'dental' => 'required|string|max:255',
                 'hemoglobin' => 'required|numeric|min:0|max:30',
                 'disability' => 'required|string|max:255',
-                'fitness' => 'required|boolean',
+                'fitness' => 'required|string|in:Kurang,Cukup,Baik',
                 'referral' => 'nullable|string'
             ]);
 

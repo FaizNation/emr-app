@@ -77,7 +77,7 @@ class ScreeningsExport implements FromCollection, WithHeadings, WithMapping, Wit
             $screening->dental,
             $screening->hemoglobin,
             $screening->disability,
-            $screening->fitness == 1 ? 'Bugar' : 'Tidak Bugar',
+            $screening->fitness,
             $screening->referral,
             $screening->created_at->format('d/m/Y'),
         ];

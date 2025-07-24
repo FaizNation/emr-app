@@ -33,7 +33,7 @@
                             <option value="">Semua Sekolah</option>
                             <option value="SD">SD</option>
                             <option value="SMP">SMP</option>
-                            <option value="SMA">SMA</option>
+                            <option value="OTHER">OTHER</option>
                         </select>
                     </div>
 

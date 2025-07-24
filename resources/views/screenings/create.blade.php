@@ -56,7 +56,8 @@
                                 <i class="mdi mdi-scale mr-1"></i>
                                 Berat Badan (kg)
                             </label>
-                            <input type="number" step="0.1" name="weight" id="weight" value="{{ old('weight') }}" placeholder="kg"
+                            <input type="number" step="0.1" name="weight" id="weight" value="{{ old('weight') }}"
+                                placeholder="kg"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm sm:text-base pl-8"
                                 required>
                         </div>
@@ -66,7 +67,8 @@
                                 <i class="mdi mdi-human-male-height mr-1"></i>
                                 Tinggi Badan (cm)
                             </label>
-                            <input type="number" step="0.1" name="height" id="height" value="{{ old('height') }}" placeholder="cm"
+                            <input type="number" step="0.1" name="height" id="height" value="{{ old('height') }}"
+                                placeholder="cm"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm sm:text-base pl-8"
                                 required>
                         </div>
@@ -91,10 +93,25 @@
                         <div>
                             <label for="nutritional_status" class="block text-sm font-medium text-gray-700">Status
                                 gizi</label>
-                            <input type="text" name="nutritional_status" id="nutritional_status"
-                                value="{{ old('nutritional_status') }}"
+                            <select name="nutritional_status" id="nutritional_status"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                 required>
+                                <option value="">Pilih Status Gizi</option>
+                                <option value="Berat badan kurang"
+                                    {{ old('nutritional_status') == 'Berat badan kurang' ? 'selected' : '' }}>
+                                    Berat badan kurang
+                                </option>
+                                <option value="Normal" {{ old('nutritional_status') == 'Normal' ? 'selected' : '' }}>
+                                    Normal
+                                </option>
+                                <option value="Berat badan berlebih"
+                                    {{ old('nutritional_status') == 'Berat badan berlebih' ? 'selected' : '' }}>
+                                    Berat badan berlebih
+                                </option>
+                                <option value="Obesitas" {{ old('nutritional_status') == 'Obesitas' ? 'selected' : '' }}>
+                                    Obesitas
+                                </option>
+                            </select>
                         </div>
 
                         <!-- Tekanan Darah -->
@@ -157,18 +174,25 @@
 
                         <!-- Kebugaran -->
                         <div>
-                            <label for="fitness" class="block text-sm font-medium text-gray-600">Status Kebugaran</label>
+                            <label for="fitness" class="block text-sm font-medium text-gray-700">Kebugaran</label>
                             <select name="fitness" id="fitness"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                <option value="">Pilih Status Kebugaran</option>
-                                <option value="1" class="text-green-600"
-                                    {{ old('fitness') == '1' ? 'selected' : '' }}>Bugar</option>
-                                <option value="0" class="text-red-600"
-                                    {{ old('fitness') == '0' ? 'selected' : '' }}>Tidak Bugar</option>
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                required>
+                                <option value="">Pilih Kebugaran</option>
+                                <option value="Kurang" {{ old('fitness') == 'Kurang' ? 'selected' : '' }}>
+                                    Kurang
+                                </option>
+                                <option value="Cukup" {{ old('fitness') == 'Cukup' ? 'selected' : '' }}>
+                                    Cukup
+                                </option>
+                                <option value="Baik" {{ old('fitness') == 'Baik' ? 'selected' : '' }}>
+                                    Baik
+                                </option>
                             </select>
                             @error('fitness')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
+
 
                         </div>
                     </div>

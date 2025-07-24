@@ -28,11 +28,8 @@
         <td class="px-6 py-4 whitespace-nowrap text-sm border-r border-gray-200">{{ $student->screening->dental }}</td>
         <td class="px-6 py-4 whitespace-nowrap text-sm border-r border-gray-200">{{ $student->screening->hemoglobin }}</td>
         <td class="px-6 py-4 whitespace-nowrap text-sm border-r border-gray-200">{{ $student->screening->disability }}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm border-r border-gray-200">
-                <span
-                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $student->screening->fitness == 1 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                    {{ $student->screening->fitness == 1 ? 'Bugar' : 'Tidak Bugar' }}
-                </span></td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm border-r border-gray-200">{{ $student->screening->fitness }}</td>
+
         <td class="px-6 py-4 whitespace-nowrap text-sm border-r border-gray-200">
                 {{ $student->screening->referral }}</td>
         <td class="px-6 py-4 whitespace-nowrap text-sm border-r border-gray-200">
